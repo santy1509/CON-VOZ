@@ -1,0 +1,316 @@
+.* {
+
+    box-sizing: border-box;
+
+    margin: 0;
+
+    padding: 0;
+
+}
+
+body {
+
+    font-family: Arial, sans-serif;
+
+    background: #f4f7f8;
+
+    color: #263746;
+
+}
+
+.contenedor {
+
+    width: 95%;
+
+    max-width: 1200px;
+
+    margin: 25px auto;
+
+}
+
+/* TÍTULO */
+
+header {
+
+    background: #1685d9;
+
+    color: white;
+
+    text-align: center;
+
+    padding: 22px;
+
+    border-radius: 8px;
+
+    margin-bottom: 20px;
+
+}
+
+header h1 {
+
+    font-size: 32px;
+
+    letter-spacing: 1px;
+
+}
+
+/* IMÁGENES */
+
+.imagenes {
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 12px;
+
+    margin-bottom: 20px;
+
+}
+
+.imagenes img {
+
+    width: 100%;
+
+    height: 220px;
+
+    object-fit: cover;
+
+    border-radius: 6px;
+
+}
+
+/* TARJETAS */
+
+.grid {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1.5fr 1fr;
+
+    gap: 15px;
+
+}
+
+.tarjeta {
+
+    background: white;
+
+    border-radius: 10px;
+
+    padding: 20px;
+
+    margin-bottom: 15px;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+}
+
+.tarjeta h2 {
+
+    color: #1767a5;
+
+    font-size: 20px;
+
+    margin-bottom: 15px;
+
+}
+
+.tarjeta p {
+
+    line-height: 1.6;
+
+}
+
+/* LISTAS */
+
+ul {
+
+    list-style: none;
+
+}
+
+li {
+
+    margin: 12px 0;
+
+    line-height: 1.4;
+
+}
+
+li::before {
+
+    content: "●";
+
+    color: #4ba3d3;
+
+    margin-right: 10px;
+
+}
+
+/* FACTORES */
+
+.factores {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 12px;
+
+}
+
+.factor {
+
+    background: #eef7fa;
+
+    padding: 15px;
+
+    border-radius: 10px;
+
+    text-align: center;
+
+    line-height: 1.8;
+
+    font-size: 15px;
+
+}
+
+/* ALERTAS */
+
+.alertas {
+
+    background: #fff5f5;
+
+}
+
+.alertas h2 {
+
+    color: #b34b4b;
+
+}
+
+/* CUIDADOS */
+
+.cuidados-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 15px;
+
+}
+
+.cuidado {
+
+    text-align: center;
+
+    background: #edf7ef;
+
+    padding: 18px;
+
+    border-radius: 10px;
+
+    font-size: 30px;
+
+}
+
+.cuidado strong {
+
+    display: block;
+
+    font-size: 16px;
+
+    margin-top: 8px;
+
+}
+
+.cuidado p {
+
+    font-size: 14px;
+
+}
+
+/* AYUDA */
+
+.ayuda {
+
+    background: #eef7ff;
+
+}
+
+.ayuda h2 {
+
+    color: #1767a5;
+
+}
+
+/* PIE DE PÁGINA */
+
+footer {
+
+    text-align: center;
+
+    margin-top: 25px;
+
+    padding: 18px;
+
+    color: #777;
+
+}
+
+/* CELULAR */
+
+@media (max-width: 800px) {
+
+    .imagenes {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .cuidados-grid {
+
+        grid-template-columns: 1fr 1fr;
+
+    }
+
+}
+
+@media (max-width: 500px) {
+
+    header h1 {
+
+        font-size: 25px;
+
+    }
+
+    .cuidados-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+ boton-whatsapp {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 12px 20px;
+    background: #25D366;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.boton-whatsapp:hover {
+    background: #1ebe5d;
+    transform: scale(1.03);
+}
+}
