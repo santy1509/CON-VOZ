@@ -314,3 +314,99 @@ footer {
     transform: scale(1.03);
 }
 }
+/* ============================= */
+/* FORMULARIO CON-VOZ            */
+/* ============================= */
+
+.formulario-convoz {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+.formulario-convoz h2 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.formulario-convoz p {
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.formulario-convoz label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.formulario-convoz input[type="text"],
+.formulario-convoz input[type="email"],
+.formulario-convoz input[type="tel"],
+.formulario-convoz textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.formulario-convoz textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.formulario-convoz input:focus,
+.formulario-convoz textarea:focus {
+    outline: none;
+    border: 2px solid #555;
+}
+
+.aceptacion {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.aceptacion input {
+    margin-top: 4px;
+}
+
+.aceptacion label {
+    margin: 0;
+    font-weight: normal;
+}
+
+.formulario-convoz button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 25px;
+    border: none;
+    border-radius: 10px;
+    background: #333;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.formulario-convoz button:hover {
+    opacity: 0.85;
+}
+
+.aviso-formulario {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    background: #f1f1f1;
+    font-size: 13px;
+    line-height: 1.5;
+}
