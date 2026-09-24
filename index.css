@@ -410,3 +410,24 @@ footer {
     font-size: 13px;
     line-height: 1.5;
 }
+.btn-repetir {
+
+    width: 100%;
+
+    margin-top: 20px;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #24577a;
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
