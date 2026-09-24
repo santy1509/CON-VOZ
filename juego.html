@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atrapa el Amor y los Valores</title>
+<style>
+* { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(160deg, #7110df, #9aa0c015);
+    color: rgb(255, 255, 255);
+    font-family: Arial, sans-serif;
+  }
+  .game-wrap {
+    width: min(96vw, 820px);
+    text-align: center;
+  }
+  h1 { margin: 0 0 8px; }
+  .info {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 8px 0;
+    font-weight: bold;
+    flex-wrap: wrap;
+  }
+  canvas {
+    width: 100%;
+    height: auto;
+    border: 3px solid #6ee7ff;
+    border-radius: 16px;
+    background: #081225;
+    box-shadow: 0 0 30px rgba(110,231,255,.2);
+    touch-action: none;
+  }
+  button {
+    margin-top: 12px;
+    padding: 10px 18px;
+    border: 0;
+    border-radius: 10px;
+    background: #6ee7ff;
+    color: #6089b4;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  p { opacity: .85; margin: 8px 0 0; }
+</style>
+</head>
+<body>
+<div class="game-wrap">
+  <h1>⭐ Atrapa el Amor y los Valores</h1>
+  <div class="info">
+    <span>Puntuación: <span id="score">0</span></span>
+    <span>Vidas: <span id="lives">3</span></span>
+    <span>Récord: <span id="best">0</span></span>
+  </div>
+  <canvas id="game" width="800" height="500"></canvas>
+  <button id="restart">Reiniciar</button>
+  <p>Muévete con ← → o A/D. En móvil, arrastra el dedo. Atrapa ❤️ Amor, 🤝 Ayuda y 👨‍👩‍👧‍👦 Familia. Evita 😢 Tristeza, 💔 Depresión y 🌧️ Desánimo.</p>
+</div>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+const scoreEl = document.getElementById("score");
+const livesEl = document.getElementById("lives");
+const bestEl = document.getElementById("best");
+const restartBtn = document.getElementById("restart");
+
+const W = canvas.width, H = canvas.height;
+let keys = {};
+let player, objects, score, lives, gameOver, spawnTimer, lastTime, best;
+
+try { best = Number(localStorage.getItem("starBest") || 0); }
+catch { best = 0; }
+bestEl.textContent = best;
+
+function reset() {
+  player = { x: W/2 - 45, y: H - 60, w: 90, h: 26, speed: 440 };
+  objects = [];
+  score = 0;
+  lives = 3;
+  gameOver = false;
+  spawnTimer = 0;
+  lastTime = performance.now();
+  updateUI();
+}
+
+function updateUI() {
+  scoreEl.textContent = score;
+  livesEl.textContent = lives;
+  bestEl.textContent = best;
+}
+
+function spawn() {
+  const bad = Math.random() < 0.40;
+  objects.push({
+    x: Math.random() * (W - 50) + 25,
+    y: -30,
+    size: 22,
+    speed: 120 + Math.random() * 150 + score * 1.7,
+    type: bad ? "bad" : "good",
+    icon: Math.floor(Math.random() * 3),
+    rot: Math.random()*Math.PI*2
+  });
+}
+
+function hit(a, b) {
+  return a.x < b.x + b.size &&
+         a.x + a.w > b.x - b.size &&
+         a.y < b.y + b.size &&
+         a.y + a.h > b.y - b.size;
+}
+
+function drawBackground() {
+  const g = ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,"#081225");
+  g.addColorStop(1,"#152b52");
+  ctx.fillStyle = g;
+  ctx.fillRect(0,0,W,H);
+
+  ctx.fillStyle = "rgba(255,255,255,.18)";
+  for (let i=0;i<75;i++) {
+    const x = (i*107)%W, y = (i*67)%H;
+    ctx.fillRect(x, y, 2, 2);
+  }
+}
+
+function drawPlayer() {
+  ctx.save();
+  ctx.fillStyle = "#6ee7ff";
+  ctx.shadowColor = "#6ee7ff";
+  ctx.shadowBlur = 18;
+  ctx.beginPath();
+  ctx.roundRect(player.x, player.y, player.w, player.h, 12);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = "#093047";
+  ctx.fillRect(player.x+12, player.y+7, player.w-24, 6);
+  ctx.restore();
+}
+
+function drawObject(o) {
+  ctx.save();
+  ctx.translate(o.x, o.y);
+
+  ctx.beginPath();
+  ctx.arc(0, 0, o.size + 12, 0, Math.PI * 2);
+  ctx.fillStyle = "rgba(255,255,255,0.95)";
+  ctx.fill();
+  ctx.rotate(o.rot);
+  ctx.font = `${o.size*3.2}px Arial`; ctx.shadowBlur = 12; ctx.shadowColor = "#ffffff";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+
+  if (o.type === "bad") {
+    const malos = ["😢","💔","🌧️"];
+    ctx.fillText(malos[o.icon], 0, 0);
+  } else {
+    const buenos = ["❤️","🤝","👨‍👩‍👧‍👦"];
+    ctx.fillText(buenos[o.icon], 0, 0);
+  }
+
+  ctx.restore();
+}
+
+function drawGameOver() {
+  ctx.fillStyle = "rgba(0,0,0,.62)";
+  ctx.fillRect(0,0,W,H);
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#fff";
+  ctx.font = "bold 52px Arial";
+  ctx.fillText("¡Juego terminado!", W/2, H/2 - 20);
+  ctx.font = "24px Arial";
+  ctx.fillText(`Puntuación: ${score}`, W/2, H/2 + 30);
+  ctx.font = "18px Arial";
+  ctx.fillText("Pulsa Reiniciar para volver a jugar", W/2, H/2 + 70);
+}
+
+function loop(now) {
+  const dt = Math.min((now - lastTime)/1000, 0.05);
+  lastTime = now;
+
+  if (!gameOver) {
+    if (keys.ArrowLeft || keys.a || keys.A) player.x -= player.speed * dt;
+    if (keys.ArrowRight || keys.d || keys.D) player.x += player.speed * dt;
+    player.x = Math.max(0, Math.min(W-player.w, player.x));
+
+    spawnTimer -= dt;
+    if (spawnTimer <= 0) {
+      spawn();
+      spawnTimer = Math.max(0.8, 1.4 - score * 0.004);
+    }
+
+    for (let i=objects.length-1;i>=0;i--) {
+      const o = objects[i];
+      o.y += o.speed * dt;
+      o.rot += dt * (o.type === "bad" ? -2 : 2);
+
+      if (hit(player, o)) {
+        if (o.type === "bad") {
+          lives--;
+        } else {
+          score++;
+          if (score > best) {
+            best = score;
+            try { localStorage.setItem("starBest", best); } catch {}
+          }
+        }
+        objects.splice(i,1);
+        updateUI();
+        if (lives <= 0) gameOver = true;
+        continue;
+      }
+
+      if (o.y > H + 40) {
+        objects.splice(i,1);
+        if (o.type === "good") {
+          lives--;
+          updateUI();
+          if (lives <= 0) gameOver = true;
+        }
+      }
+    }
+  }
+
+  drawBackground();
+  objects.forEach(drawObject);
+  drawPlayer();
+  if (gameOver) drawGameOver();
+  requestAnimationFrame(loop);
+}
+
+window.addEventListener("keydown", e => {
+  keys[e.key] = true;
+  if (["ArrowLeft","ArrowRight"," "].includes(e.key)) e.preventDefault();
+  if (gameOver && e.key === "Enter") reset();
+});
+window.addEventListener("keyup", e => keys[e.key] = false);
+
+let dragging = false;
+function moveWithPointer(e) {
+  const rect = canvas.getBoundingClientRect();
+  const px = (e.clientX - rect.left) / rect.width * W;
+  player.x = Math.max(0, Math.min(W-player.w, px - player.w/2));
+}
+canvas.addEventListener("pointerdown", e => { dragging = true; canvas.setPointerCapture(e.pointerId); moveWithPointer(e); });
+canvas.addEventListener("pointermove", e => { if (dragging) moveWithPointer(e); });
+canvas.addEventListener("pointerup", () => dragging = false);
+canvas.addEventListener("pointercancel", () => dragging = false);
+restartBtn.addEventListener("click", reset);
+
+reset();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
