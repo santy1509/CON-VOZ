@@ -410,24 +410,22 @@ footer {
     font-size: 13px;
     line-height: 1.5;
 }
-.btn-repetir {
-
-    width: 100%;
-
-    margin-top: 20px;
-
-    padding: 14px;
-
-    border: none;
-
-    border-radius: 10px;
-
+.boton-encuesta {
+    display: block;
+    width: 80%;
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 16px;
     background: #24577a;
-
     color: white;
-
+    text-align: center;
+    text-decoration: none;
+    border-radius: 12px;
+    font-size: 18px;
     font-weight: bold;
-
-    cursor: pointer;
-
 }
+
+.boton-encuesta:hover {
+    opacity: 0.85;
+}
+
